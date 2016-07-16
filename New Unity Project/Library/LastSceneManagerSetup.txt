@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/Users/Steven/Documents/GitHub/Summer2016SideScrollGame/Assets/StageOne.unity
+  isLoaded: 1
+  isActive: 1
