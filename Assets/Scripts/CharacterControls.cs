@@ -9,10 +9,13 @@ public class CharacterControls : MonoBehaviour {
 	public float speed = 15;
 	public float acceleration = 1000;
 	public float gravity = -20;
+    public float jump = 25;
 
-	private float currentSpeed;
-	private float targetSpeedHorizontal;
-	private Vector2 amountToMove;
+    Vector3 velocity;
+
+	//private float currentSpeed;
+	//private float targetSpeedHorizontal;
+	//private Vector2 amountToMove;
 
 	private CharacterPhysics phys;
 
@@ -24,12 +27,34 @@ public class CharacterControls : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-		targetSpeedHorizontal = Input.GetAxisRaw ("Horizontal") * speed;
+        if (phys.collisions.up || phys.collisions.down)
+        {
+            velocity.y = 0;
+        }
+
+        Vector2 inputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        velocity.x = inputMove.x * speed;
+        velocity.y += gravity * Time.deltaTime;
+        phys.Move(velocity * Time.deltaTime);
+		/*targetSpeedHorizontal = Input.GetAxisRaw ("Horizontal") * speed;
 		currentSpeed = IncrementSpeed (currentSpeed, targetSpeedHorizontal, acceleration);
+
+        if (phys.onGround)
+        {
+            amountToMove.y = 0;
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                amountToMove.y = jump;
+            }
+
+        }
 
 		amountToMove.x = currentSpeed;
 		amountToMove.y += gravity * Time.deltaTime;
 		phys.Move (amountToMove * Time.deltaTime);
+        */
 	}
 
 	private float IncrementSpeed(float currentVel, float targetVel, float acc) {
