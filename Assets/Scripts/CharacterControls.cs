@@ -5,11 +5,15 @@ using System.Collections;
 
 public class CharacterControls : MonoBehaviour {
 
-	//Character Handling
-	public float speed = 15;
+	//Character Handlling
+
+	float jumpHeight = 8;
+	float timeToJumpApex = .4f;
+
+	public float speed = 8;
 	public float acceleration = 1000;
-	public float gravity = -20;
-    public float jump = 25;
+	public float gravity;
+	public float jumpVelocity;
 
     Vector3 velocity;
 
@@ -22,6 +26,8 @@ public class CharacterControls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		phys = GetComponent<CharacterPhysics> ();
+		gravity = -2 * jumpHeight / Mathf.Pow (timeToJumpApex, 2);
+		jumpVelocity = -gravity * timeToJumpApex;
 	}
 	
 	// Update is called once per frame
@@ -32,7 +38,13 @@ public class CharacterControls : MonoBehaviour {
             velocity.y = 0;
         }
 
+		//detecting left and right
         Vector2 inputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+		//detecting jump
+		if (Input.GetKeyDown (KeyCode.Space) && phys.collisions.down) {
+			velocity.y = jumpVelocity;
+		}
 
         velocity.x = inputMove.x * speed;
         velocity.y += gravity * Time.deltaTime;
