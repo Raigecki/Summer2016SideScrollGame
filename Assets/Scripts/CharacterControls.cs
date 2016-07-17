@@ -5,6 +5,8 @@ using System.Collections;
 
 public class CharacterControls : MonoBehaviour {
 
+	private Animator animator;
+
 	//Character Handlling
 
 	float jumpHeight = 8;
@@ -28,6 +30,10 @@ public class CharacterControls : MonoBehaviour {
 		phys = GetComponent<CharacterPhysics> ();
 		gravity = -2 * jumpHeight / Mathf.Pow (timeToJumpApex, 2);
 		jumpVelocity = -gravity * timeToJumpApex;
+
+		//animator
+		animator = GetComponent<Animator>();
+
 	}
 	
 	// Update is called once per frame
@@ -49,24 +55,10 @@ public class CharacterControls : MonoBehaviour {
         velocity.x = inputMove.x * speed;
         velocity.y += gravity * Time.deltaTime;
         phys.Move(velocity * Time.deltaTime);
-		/*targetSpeedHorizontal = Input.GetAxisRaw ("Horizontal") * speed;
-		currentSpeed = IncrementSpeed (currentSpeed, targetSpeedHorizontal, acceleration);
+	
+		//animations
+		onRun();
 
-        if (phys.onGround)
-        {
-            amountToMove.y = 0;
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                amountToMove.y = jump;
-            }
-
-        }
-
-		amountToMove.x = currentSpeed;
-		amountToMove.y += gravity * Time.deltaTime;
-		phys.Move (amountToMove * Time.deltaTime);
-        */
 	}
 
 	private float IncrementSpeed(float currentVel, float targetVel, float acc) {
@@ -94,6 +86,15 @@ public class CharacterControls : MonoBehaviour {
 				return currentVel;
 			else
 				return targetVel;		
+		}
+	}
+
+	protected void onRun() {
+
+		if (velocity.x > 0) {
+			animator.SetTrigger ("char_run");
+		} else if (velocity.x == 0) {
+			animator.SetTrigger ("char_idle");
 		}
 	}
 }
