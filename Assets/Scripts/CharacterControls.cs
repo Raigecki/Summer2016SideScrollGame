@@ -96,5 +96,9 @@ public class CharacterControls : MonoBehaviour {
 		} else if (velocity.x == 0) {
 			animator.SetTrigger ("char_idle");
 		}
+        else if (velocity.x < 0)
+        {
+            animator.SetTrigger("char_run_left");
+        }
 	}
 }
