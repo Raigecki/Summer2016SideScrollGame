@@ -58,6 +58,7 @@ public class CharacterControls : MonoBehaviour {
 	
 		//animations
 		onRun();
+		handleLayers ();
 
 	}
 
@@ -91,14 +92,36 @@ public class CharacterControls : MonoBehaviour {
 
 	protected void onRun() {
 
-		if (velocity.x > 0) {
+		//Grounded movements
+		if (velocity.x > 0 && phys.collisions.down) {
 			animator.SetTrigger ("char_run");
-		} else if (velocity.x == 0) {
+		} else if (velocity.x == 0 && phys.collisions.down) {
 			animator.SetTrigger ("char_idle");
 		}
-        else if (velocity.x < 0)
+		else if (velocity.x < 0 && phys.collisions.down)
         {
             animator.SetTrigger("char_run_left");
         }
+
+		//air movements
+		if (Input.GetKeyDown (KeyCode.Space) && !phys.collisions.down && velocity.x > 0) {
+			animator.SetTrigger ("char_jump_right");
+		}
+		else if (Input.GetKeyDown (KeyCode.Space) && !phys.collisions.down && velocity.x < 0) {
+			animator.SetTrigger ("char_jump_left");
+		}
+		else if (!phys.collisions.down && velocity.x > 0)
+			animator.SetTrigger ("char_jump_right");
+		else if (!phys.collisions.down && velocity.x < 0)
+			animator.SetTrigger ("char_jump_left");
 	}
+
+	public void handleLayers() {
+
+		if (!phys.collisions.down) {
+			animator.SetLayerWeight (1, 1);
+		} else {
+			animator.SetLayerWeight (1, 0);
+		}
+	}			
 }
